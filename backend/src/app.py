@@ -6,17 +6,17 @@ from bson import ObjectId
 
 # Instantiation
 app = Flask(__name__)
-app.config['MONGO_URI'] = 'mongodb://localhost/pythonreact'
+app.config['MONGO_URI'] = 'mongodb://localhost/crud_muro'
 mongo = PyMongo(app)
 
 # Settings
 CORS(app)
 
 # Database
-db = mongo.db.pythonreact
+db = mongo.db.medicos
 
 # Routes
-@app.route('/users', methods=['POST'])
+@app.route('/medicos', methods=['POST'])
 def createUser():
   print(request.json)
   id = db.insert({
@@ -27,7 +27,7 @@ def createUser():
   return jsonify(str(ObjectId(id)))
 
 
-@app.route('/users', methods=['GET'])
+@app.route('/medicos', methods=['GET'])
 def getUsers():
     users = []
     for doc in db.find():
@@ -39,10 +39,9 @@ def getUsers():
         })
     return jsonify(users)
 
-@app.route('/users/<id>', methods=['GET'])
+@app.route('/medicos/<id>', methods=['GET'])
 def getUser(id):
   user = db.find_one({'_id': ObjectId(id)})
-  print(user)
   return jsonify({
       '_id': str(ObjectId(user['_id'])),
       'name': user['name'],
@@ -51,12 +50,12 @@ def getUser(id):
   })
 
 
-@app.route('/users/<id>', methods=['DELETE'])
+@app.route('/medicos/<id>', methods=['DELETE'])
 def deleteUser(id):
   db.delete_one({'_id': ObjectId(id)})
-  return jsonify({'message': 'User Deleted'})
+  return jsonify({'message': 'Medico eliminado'})
 
-@app.route('/users/<id>', methods=['PUT'])
+@app.route('/medicos/<id>', methods=['PUT'])
 def updateUser(id):
   print(request.json)
   db.update_one({'_id': ObjectId(id)}, {"$set": {
@@ -64,7 +63,7 @@ def updateUser(id):
     'email': request.json['email'],
     'password': request.json['password']
   }})
-  return jsonify({'message': 'User Updated'})
+  return jsonify({'message': 'Medico Actualizado'})
 
 if __name__ == "__main__":
     app.run(debug=True)

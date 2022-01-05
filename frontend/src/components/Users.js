@@ -1,26 +1,26 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react"
 
-const API = process.env.REACT_APP_API;
+const API = process.env.REACT_APP_API
 
 export const Users = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
-  const [editing, setEditing] = useState(false);
-  const [id, setId] = useState("");
+  const [editing, setEditing] = useState(false)
+  const [id, setId] = useState("")
 
-  const nameInput = useRef(null);
+  const nameInput = useRef(null)
 
-  let [users, setUsers] = useState([]);
+  let [users, setUsers] = useState([])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!editing) {
-      const res = await fetch(`${API}/users`, {
-        method: "POST",
+      const res = await fetch(`${API}/medicos`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name,
@@ -28,10 +28,10 @@ export const Users = () => {
           password,
         }),
       });
-      await res.json();
+      await res.json()
     } else {
-      const res = await fetch(`${API}/users/${id}`, {
-        method: "PUT",
+      const res = await fetch(`${API}/medicos/${id}`, {
+        method: 'PUT',
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,38 +42,36 @@ export const Users = () => {
         }),
       });
       const data = await res.json();
-      console.log(data);
       setEditing(false);
-      setId("");
+      setId('')
     }
     await getUsers();
 
-    setName("");
-    setEmail("");
-    setPassword("");
-    nameInput.current.focus();
+    setName('')
+    setEmail('')
+    setPassword('')
+    nameInput.current.focus()
   };
 
   const getUsers = async () => {
-    const res = await fetch(`${API}/users`);
+    const res = await fetch(`${API}/medicos`);
     const data = await res.json();
     setUsers(data);
   };
 
   const deleteUser = async (id) => {
-    const userResponse = window.confirm("Are you sure you want to delete it?");
+    const userResponse = window.confirm('¿Está seguro de eliminar el registro?');
     if (userResponse) {
-      const res = await fetch(`${API}/users/${id}`, {
-        method: "DELETE",
+      const res = await fetch(`${API}/medicos/${id}`, {
+        method: 'DELETE',
       });
       const data = await res.json();
-      console.log(data);
       await getUsers();
     }
   };
 
   const editUser = async (id) => {
-    const res = await fetch(`${API}/users/${id}`);
+    const res = await fetch(`${API}/medicos/${id}`);
     const data = await res.json();
 
     setEditing(true);
@@ -100,7 +98,7 @@ export const Users = () => {
               onChange={(e) => setName(e.target.value)}
               value={name}
               className="form-control"
-              placeholder="Name"
+              placeholder="Nombre"
               ref={nameInput}
               autoFocus
             />
@@ -111,7 +109,7 @@ export const Users = () => {
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               className="form-control"
-              placeholder="User's Email"
+              placeholder="Email"
             />
           </div>
           <div className="form-group">
@@ -120,11 +118,11 @@ export const Users = () => {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               className="form-control"
-              placeholder="User's Password"
+              placeholder="Contraseña"
             />
           </div>
-          <button className="btn btn-primary btn-block">
-            {editing ? "Update" : "Create"}
+          <button className="btn btn-success btn-block">
+            {editing ? "Actualizar" : "Crear"}
           </button>
         </form>
       </div>
@@ -132,10 +130,10 @@ export const Users = () => {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Nombre</th>
               <th>Email</th>
-              <th>Password</th>
-              <th>Operations</th>
+              <th>Contraseña</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -146,16 +144,16 @@ export const Users = () => {
                 <td>{user.password}</td>
                 <td>
                   <button
-                    className="btn btn-secondary btn-sm btn-block"
+                    className="btn btn-light btn-sm btn-block"
                     onClick={(e) => editUser(user._id)}
                   >
-                    Edit
+                    Editar
                   </button>
                   <button
                     className="btn btn-danger btn-sm btn-block"
                     onClick={(e) => deleteUser(user._id)}
                   >
-                    Delete
+                    Eliminar
                   </button>
                 </td>
               </tr>
